@@ -261,55 +261,55 @@ bool greaterEq(const T data1, const T data2)
 	return data1 >= data2;
 }
 
-int main()
-{
-	/*BinaryHeap<int>* heap = new BinaryHeap<int>;
-	heap->insert(19, greaterEq<int>);
-	heap->insert(36, greaterEq<int>);
-	heap->insert(25, greaterEq<int>);
-	heap->insert(1, greaterEq<int>);
-	heap->insert(17, greaterEq<int>);
-	heap->insert(3, greaterEq<int>);
-	heap->insert(2, greaterEq<int>);
-	heap->insert(7, greaterEq<int>);
-	heap->insert(100, greaterEq<int>);
-
-	for (size_t i = 9; i > 0; i--)
-	{
-		std::cout << heap->toString(i) << heap->getMax(greaterEq<int>) << '\n';
-	}*/
-
-	const int MAX_ORDER = 7;
-	BinaryHeap<int>* bh = new BinaryHeap<int>();
-	for (int o = 1; o <= MAX_ORDER; o++)
-	{
-		const int n = pow(10, o); // rozmiar danych
-		// dodawanie do kopca
-		clock_t t1 = clock();
-		for (int i = 0; i < n; i++) {
-			int so = rand() * rand() % 10000000 + 1; // losowe dane
-			bh->insert(so, greaterEq<int>);
-		}
-		clock_t t2 = clock();
-		std::cout << "Sample size = "<< n << "\n";
-		std::cout << bh->toString(10);
-		std::cout << "Total time of inserting = " << ((t2 - t1) / (double)CLOCKS_PER_SEC) * 1000 << "ms\n";
-		std::cout << "Average time of inserting = " << ((t2 - t1) / (double)CLOCKS_PER_SEC) * 1000 / n << "ms\n";
-		// wypis na ekran aktualnej postaci kopca ( skrotowej ) oraz pomiarow czasowych
-		// p o b i e r a n i e ( i usuwanie ) elementu m a k s y m a l n e g o z kopca
-			t1 = clock();
-		for (int i = 0; i < n; i++) {
-			int polled = bh->getMax(greaterEq<int>); // argument : wskaznik na k o m p a r a t o r
-			// e w e n t u a l n y wypis na ekran danych elementu pobranego ( przy malym e k s p e r y m e n c i e )
-		}
-		t2 = clock();
-		std::cout << "Total time of polling = " << ((t2 - t1) / (double)CLOCKS_PER_SEC) * 1000 << "ms\n";
-		std::cout << "Average time of polling = " << ((t2 - t1) / (double)CLOCKS_PER_SEC) * 1000 / n << "ms\n\n";
-		//std::cout << bh->toString(1);
-		// wypis na ekran aktualnej postaci kopca ( kopiec pusty ) oraz pomiarow czasowych
-		bh->clear(); // c z y s z c z e n i e kopca ( tak naprawde ,, z r e s e t o w a n i e ’’ tablicy d y n a m i c z n e j o p a k o w a n e j przez kopiec )
-	}
-	delete bh;
-
-	return 0;
-}
+//int main()
+//{
+//	/*BinaryHeap<int>* heap = new BinaryHeap<int>;
+//	heap->insert(19, greaterEq<int>);
+//	heap->insert(36, greaterEq<int>);
+//	heap->insert(25, greaterEq<int>);
+//	heap->insert(1, greaterEq<int>);
+//	heap->insert(17, greaterEq<int>);
+//	heap->insert(3, greaterEq<int>);
+//	heap->insert(2, greaterEq<int>);
+//	heap->insert(7, greaterEq<int>);
+//	heap->insert(100, greaterEq<int>);
+//
+//	for (size_t i = 9; i > 0; i--)
+//	{
+//		std::cout << heap->toString(i) << heap->getMax(greaterEq<int>) << '\n';
+//	}*/
+//
+//	const int MAX_ORDER = 7;
+//	BinaryHeap<int>* bh = new BinaryHeap<int>();
+//	for (int o = 1; o <= MAX_ORDER; o++)
+//	{
+//		const int n = pow(10, o); // rozmiar danych
+//		// dodawanie do kopca
+//		clock_t t1 = clock();
+//		for (int i = 0; i < n; i++) {
+//			int so = rand() * rand() % 10000000 + 1; // losowe dane
+//			bh->insert(so, greaterEq<int>);
+//		}
+//		clock_t t2 = clock();
+//		std::cout << "Sample size = "<< n << "\n";
+//		std::cout << bh->toString(10);
+//		std::cout << "Total time of inserting = " << ((t2 - t1) / (double)CLOCKS_PER_SEC) * 1000 << "ms\n";
+//		std::cout << "Average time of inserting = " << ((t2 - t1) / (double)CLOCKS_PER_SEC) * 1000 / n << "ms\n";
+//		// wypis na ekran aktualnej postaci kopca ( skrotowej ) oraz pomiarow czasowych
+//		// p o b i e r a n i e ( i usuwanie ) elementu m a k s y m a l n e g o z kopca
+//			t1 = clock();
+//		for (int i = 0; i < n; i++) {
+//			int polled = bh->getMax(greaterEq<int>); // argument : wskaznik na k o m p a r a t o r
+//			// e w e n t u a l n y wypis na ekran danych elementu pobranego ( przy malym e k s p e r y m e n c i e )
+//		}
+//		t2 = clock();
+//		std::cout << "Total time of polling = " << ((t2 - t1) / (double)CLOCKS_PER_SEC) * 1000 << "ms\n";
+//		std::cout << "Average time of polling = " << ((t2 - t1) / (double)CLOCKS_PER_SEC) * 1000 / n << "ms\n\n";
+//		//std::cout << bh->toString(1);
+//		// wypis na ekran aktualnej postaci kopca ( kopiec pusty ) oraz pomiarow czasowych
+//		bh->clear(); // c z y s z c z e n i e kopca ( tak naprawde ,, z r e s e t o w a n i e ’’ tablicy d y n a m i c z n e j o p a k o w a n e j przez kopiec )
+//	}
+//	delete bh;
+//
+//	return 0;
+//}
