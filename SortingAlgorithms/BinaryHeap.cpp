@@ -12,6 +12,12 @@
 #define EXPANSION_MULTIPLIER 2
 
 template<typename T>
+bool greaterEq(const T data1, const T data2)
+{
+	return data1 >= data2;
+}
+
+template<typename T>
 class DynamicArray
 {
 private:
@@ -152,6 +158,19 @@ public:
 	{
 		table = new DynamicArray<T>;
 	}
+
+	BinaryHeap(DynamicArray<T>* new_table, int table_size, bool top_down)
+	{
+		table = new_table;
+		if (top_down)
+		{
+			fixDown();
+		}
+		else
+		{
+			fixUp();
+		}
+	}
 	~BinaryHeap(void)
 	{
 		delete table;
@@ -175,8 +194,43 @@ public:
 
 	void clear(void)
 	{
-		delete table;
-		table = new DynamicArray<T>;
+		table->actual_size = 0;
+	}
+
+	void fixUp()
+	{
+		for (int i = table->actual_size; i > 0; i--)
+		{
+			upHeap(i-1, greaterEq<T>);
+		}
+	}
+
+	void fixDown()
+	{
+		int index = 0;
+		bool if_changed = true;
+		while (if_changed)
+		{
+			if_changed = downHeap(index, greaterEq<T>);
+			if (!if_changed && index < table->actual_size)
+			{
+				if_changed = true;
+				index++;
+			}
+		}
+		downHeap(0, greaterEq<T>);
+
+		/*for (int i = 0; i < 1000; i++)
+		{
+			T max = getMax(greaterEq<T>);
+			insert(max, greaterEq<T>);
+		}*/
+		//for (int i = 0; i < table->actual_size; i++)
+		//{
+		//	table->swap(0,table->GetActualSize()  - 1);
+		//	downHeap(0, greaterEq<T>);
+		//	//downHeap(1, greaterEq<T>);
+		//}
 	}
 
 	std::string toString(uint32_t number_to_print)
@@ -184,6 +238,20 @@ public:
 		return table->ToString(number_to_print);
 	}
 
+	void Sort(int size)
+	{
+		T* sorting_array = new T[size];
+		for (int i = 0; i < size; i++)
+		{
+			sorting_array[size - 1 - i] = getMax(greaterEq<T>);
+		}
+		for (int i = 0; i < size; i++)
+		{
+			table->values[i] = sorting_array[size - 1 - i];
+			table->actual_size++;
+		}
+		delete[] sorting_array;
+	}
 
 	template<typename Comp>
 	void insert(T data, Comp greaterEq)
@@ -204,7 +272,8 @@ public:
 		else if (table->GetActualSize() == 1)
 		{
 			max = table->values[0];
-			clear();
+			table->actual_size--;
+			//clear();
 			return max;
 		}
 		max = table->values[0];
@@ -216,19 +285,20 @@ public:
 	}
 
 	template<typename Comp>
-	void upHeap(int& current_element, Comp& greaterEq)
+	void upHeap(int current_element_index, Comp greaterEq)
 	{
-		if (current_element != 0 && greaterEq(table->Get(current_element), table->Get(parent(current_element))))
+		if (current_element_index != 0 && greaterEq(table->Get(current_element_index), table->Get(parent(current_element_index))))
 		{
-			table->swap(current_element, parent(current_element));
-			current_element = parent(current_element);
-			upHeap(current_element, greaterEq);
+			table->swap(current_element_index, parent(current_element_index));
+			current_element_index = parent(current_element_index);
+			upHeap(current_element_index, greaterEq);
 		}
 	}
 
 	template<typename Comp>
-	void downHeap(int index, Comp greaterEq)
+	bool downHeap(int index, Comp greaterEq)
 	{
+		bool ret_val = false;
 		if (!greaterEq(table->values[index], table->values[left(index)]) || !greaterEq(table->values[index], table->values[right(index)]))
 		{
 			if (greaterEq(table->values[left(index)], table->values[right(index)]))
@@ -237,29 +307,29 @@ public:
 				{
 					table->swap(index, left(index));
 					index = left(index);
+					ret_val = true;
 				}
 			}
 			else
 			{
-				if (left(index) < table->actual_size)
+				if (right(index) < table->actual_size)
 				{
 					table->swap(index, right(index));
 					index = right(index);
+					ret_val = true;
 				}
 			}
-			if (right(index) < table->actual_size && left(index) < table->actual_size)
+			//if (right(index) < table->actual_size && left(index) < table->actual_size)
+			if (right(index) < table->actual_size || left(index) < table->actual_size)
 			{
 				downHeap(index, greaterEq);
+				//printf("recursion");
 			}
 		}
+		return ret_val;
 	}
 };
 
-template<typename T>
-bool greaterEq(const T data1, const T data2)
-{
-	return data1 >= data2;
-}
 
 //int main()
 //{
