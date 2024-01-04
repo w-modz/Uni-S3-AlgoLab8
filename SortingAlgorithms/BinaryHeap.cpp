@@ -151,9 +151,10 @@ private:
 template <typename T>
 class BinaryHeap
 {
-private:
-	DynamicArray<T>* table;
 public:
+//private:
+	DynamicArray<T>* table;
+//public:
 	BinaryHeap(void)
 	{
 		table = new DynamicArray<T>;
@@ -199,15 +200,15 @@ public:
 
 	void fixUp()
 	{
-		for (int i = table->actual_size; i > 0; i--)
+		for (int i = 1; i < table->actual_size; i++)
 		{
-			upHeap(i-1, greaterEq<T>);
+			upHeap(i, greaterEq<T>);
 		}
 	}
 
 	void fixDown()
 	{
-		int index = 0;
+		/*int index = 0;
 		bool if_changed = true;
 		while (if_changed)
 		{
@@ -218,19 +219,21 @@ public:
 				index++;
 			}
 		}
-		downHeap(0, greaterEq<T>);
+		downHeap(0, greaterEq<T>);*/
 
-		/*for (int i = 0; i < 1000; i++)
+		/*for (int i = 0; i < table->actual_size; i++)
 		{
-			T max = getMax(greaterEq<T>);
-			insert(max, greaterEq<T>);
+			downHeap(i,greaterEq<T>);
+		}
+		downHeap(0,greaterEq<T>);*/
+		for (int i = table->actual_size - 1; i >= 0; i--)
+		{
+			downHeap(i, greaterEq<T>);
+		}
+		/*for (int i = table->actual_size - 1; i >= 0; i--)
+		{
+			downHeap(i, greaterEq<T>);
 		}*/
-		//for (int i = 0; i < table->actual_size; i++)
-		//{
-		//	table->swap(0,table->GetActualSize()  - 1);
-		//	downHeap(0, greaterEq<T>);
-		//	//downHeap(1, greaterEq<T>);
-		//}
 	}
 
 	std::string toString(uint32_t number_to_print)
@@ -240,17 +243,21 @@ public:
 
 	void Sort(int size)
 	{
-		T* sorting_array = new T[size];
 		for (int i = 0; i < size; i++)
 		{
-			sorting_array[size - 1 - i] = getMax(greaterEq<T>);
+			getMax(greaterEq<T>);
+
+			if (i < 10)
+			{
+				printf("After swap: ");
+				for (int j = 0; j < 10; j++)
+				{
+					printf("%i ", table->values[j]);
+				}
+				printf("\n");
+			}
 		}
-		for (int i = 0; i < size; i++)
-		{
-			table->values[i] = sorting_array[size - 1 - i];
-			table->actual_size++;
-		}
-		delete[] sorting_array;
+		table->actual_size = size;
 	}
 
 	template<typename Comp>
@@ -269,17 +276,24 @@ public:
 		{
 			throw std::domain_error("err");
 		}
-		else if (table->GetActualSize() == 1)
-		{
-			max = table->values[0];
-			table->actual_size--;
-			//clear();
-			return max;
-		}
+		//else if (table->GetActualSize() == 1)
+		//{
+		//	max = table->values[0];
+		//	table->actual_size--;
+		//	//clear();
+		//	return max;
+		//}
 		max = table->values[0];
-		table->values[0] = table->values[table->GetActualSize() - 1];
-		//table->values[table->GetActualSize() - 1];
-		table->actual_size--;
+		if (table->actual_size > 1)
+		{
+			table->swap(0, table->GetActualSize() - 1);
+			table->actual_size--;
+		}
+		else
+		{
+			table->actual_size++;
+			table->swap(0,1);
+		}
 		downHeap(0, greaterEq);
 		return max;
 	}
@@ -298,6 +312,10 @@ public:
 	template<typename Comp>
 	bool downHeap(int index, Comp greaterEq)
 	{
+		if (right(index) >= table->actual_size || left(index) >= table->actual_size)
+		{
+			return false;
+		}
 		bool ret_val = false;
 		if (!greaterEq(table->values[index], table->values[left(index)]) || !greaterEq(table->values[index], table->values[right(index)]))
 		{
@@ -320,11 +338,8 @@ public:
 				}
 			}
 			//if (right(index) < table->actual_size && left(index) < table->actual_size)
-			if (right(index) < table->actual_size || left(index) < table->actual_size)
-			{
+			
 				downHeap(index, greaterEq);
-				//printf("recursion");
-			}
 		}
 		return ret_val;
 	}
